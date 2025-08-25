@@ -1,0 +1,3 @@
+User-agent: *
+Disallow:
+Sitemap: https://gotofukueuoichi-dot.github.io/fukue-fish-market/sitemap.xml
