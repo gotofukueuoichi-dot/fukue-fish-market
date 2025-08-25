@@ -275,42 +275,57 @@
     <small>© <span id="y"></span> 五島市福江魚市</small>
   </footer>
 
-  <script>
-  document.getElementById('y').textContent = new Date().getFullYear();
-  // クリック時にのみGoogleマップを読み込み（初期表示で外部通信しない）
-  const btn = document.getElementById('show-map');
-  if (btn) {
-    btn.addEventListener('click', () => {
-      const holder = document.getElementById('map-holder');
-      if (!holder || holder.dataset.loaded) return;
-      const iframe = document.createElement('iframe');
-      iframe.title = 'Googleマップ埋め込み';
-      iframe.className = 'map';
-      iframe.loading = 'lazy';
-      iframe.referrerPolicy = 'no-referrer-when-downgrade';
-      iframe.src = 'https://www.google.com/maps?q=%E9%95%B7%E5%B4%8E%E7%9C%8C%E4%BA%94%E5%B3%B6%E5%B8%82%E7%A6%8F%E6%B1%9F%E7%94%BA1190-76&output=embed';
-      // ロード監視（失敗時はリンク案内にフォールバック）
-      const timer = setTimeout(() => {
-        const link = document.createElement('a');
-        link.className = 'btn primary';
-        link.textContent = 'Googleマップで開く';
-        link.target = '_blank';
-        link.rel = 'noopener';
-        link.href = 'https://www.google.com/maps?q=%E9%95%B7%E5%B4%8E%E7%9C%8C%E4%BA%94%E5%B3%B6%E5%B8%82%E7%A6%8F%E6%B1%9F%E7%94%BA1190-76';
-        const wrap = document.createElement('div');
-        wrap.style.display='grid'; wrap.style.placeItems='center'; wrap.style.gap='10px'; wrap.style.padding='1rem';
-        const msg = document.createElement('div');
-        msg.className='muted';
-        msg.textContent='地図を読み込めませんでした。ボタンからGoogleマップを開いてください。';
-        wrap.appendChild(link); wrap.appendChild(msg);
-        holder.replaceWith(wrap);
-      }, 5000);
-      iframe.addEventListener('load', () => clearTimeout(timer));
-      holder.replaceWith(iframe);
-      holder.dataset.loaded = '1';
-    });
+<script>
+(() => {
+  // フッターの年号
+  const y = document.getElementById('y');
+  if (y) y.textContent = new Date().getFullYear();
+
+  // ---- Googleマップを常時表示（ページ読み込み時に1回だけ実行） ----
+  // ① まずは埋め込み用URL（output=embed が重要）
+  //    もし後で「地図を埋め込む」から pb=… のURLを取ったら、下の SRC をそのURLに差し替えてOK
+  const ADDRESS = "長崎県五島市福江町1190-76";
+  const SRC = "https://www.google.com/maps?hl=ja&q="
+              + encodeURIComponent(ADDRESS) + "&z=17&output=embed";
+
+  function mountMap() {
+    const holder = document.getElementById('map-holder');
+    if (!holder || holder.dataset.loaded) return;
+
+    const iframe = document.createElement('iframe');
+    iframe.title = 'Googleマップ';
+    iframe.className = 'map';                 // 既存の .map スタイルを利用
+    iframe.loading = 'lazy';
+    iframe.referrerPolicy = 'no-referrer-when-downgrade';
+    iframe.style.border = '0';
+    iframe.src = SRC;
+
+    // 失敗したときのフォールバック（5秒待って出なければ案内表示）
+    const timer = setTimeout(() => {
+      holder.innerHTML =
+        `<div style="display:grid;place-items:center;gap:10px;padding:1rem">
+           <a class="btn primary" target="_blank" rel="noopener"
+              href="https://www.google.com/maps?q=${encodeURIComponent(ADDRESS)}">
+             Googleマップで開く
+           </a>
+           <div class="muted">地図を読み込めませんでした。上のボタンから開いてください。</div>
+         </div>`;
+    }, 5000);
+    iframe.addEventListener('load', () => clearTimeout(timer));
+
+    holder.innerHTML = "";
+    holder.appendChild(iframe);
+    holder.dataset.loaded = '1';
   }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', mountMap);
+  } else {
+    mountMap();
+  }
+})();
 </script>
+
 
   <!-- 構造化データ（任意。検索表示改善を狙う） -->
   <script type="application/ld+json">
