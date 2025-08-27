@@ -17,23 +17,48 @@
       line-height:1.7; letter-spacing:.02em;
     }
     a{color:var(--brand)}
-    /* header */
-    .nav{position:sticky;top:0;z-index:50;backdrop-filter:saturate(140%) blur(10px);background:rgba(255,255,255,.9);border-bottom:1px solid var(--line)}
-    .nav-wrap{max-width:1100px;margin:auto;padding:.6rem 1rem;display:flex;align-items:center;gap:1rem}
-    .brand{font-weight:900;letter-spacing:.04em;font-size:1.1rem}.brand b{color:var(--brand)}
-    .nav ul{margin:0 0 0 auto;padding:0;display:flex;gap:.6rem;list-style:none;flex-wrap:wrap}
-    .nav a{display:inline-block;padding:.5rem .8rem;border-radius:999px;text-decoration:none;color:var(--ink);border:1px solid var(--line)}
-    .nav a:hover{background:rgba(61,169,252,.12)}
-    /* hero */
+
+    /* header（サイト名を上段・ナビを下段に） */
+    .nav{
+      position:sticky; top:0; z-index:50;
+      backdrop-filter:saturate(140%) blur(10px);
+      background:rgba(255,255,255,.9);
+      border-bottom:1px solid var(--line);
+    }
+    .nav-wrap{
+      max-width:1100px; margin:auto; padding:.6rem 1rem;
+      display:flex; flex-direction:column; /* 縦に並べる */
+      align-items:center; gap:.6rem;
+    }
+    .brand{
+      font-weight:900; letter-spacing:.04em;
+      font-size:32px;                  /* ← 大きく */
+      text-align:center;
+    }
+    .brand b{ color:var(--brand); }
+    .nav ul{
+      margin:0 auto; padding:0;
+      display:flex; gap:.6rem;
+      list-style:none; flex-wrap:wrap; justify-content:center;
+    }
+    .nav a{
+      display:inline-block; padding:.5rem .8rem; border-radius:999px;
+      text-decoration:none; color:var(--ink); border:1px solid var(--line)
+    }
+    .nav a:hover{ background:rgba(61,169,252,.12) }
+
+    /* hero（既存） */
     .hero{position:relative;isolation:isolate;display:grid;place-items:center;text-align:center;min-height:52vh;border-bottom:1px solid var(--line);
       background:radial-gradient(900px 500px at 80% 0%, rgba(61,169,252,.08), transparent 60%),
-                 radial-gradient(900px 550px at 10% 100%, rgba(144,180,206,.12), transparent 60%);}
+                 radial-gradient(900px 550px at 10% 100%, rgba(144,180,206,.12), transparent 60%);
+    }
     .hero .inner{max-width:1100px;padding:4rem 1rem}
     .kicker{display:inline-flex;align-items:center;gap:.5rem;font-weight:700;color:#9bdcff}
     .kicker::before{content:"";width:8px;height:8px;border-radius:999px;background:var(--brand)}
     h1{font-size:clamp(1.8rem,3.2vw,2.6rem);margin:.6rem 0 0;letter-spacing:.03em;text-wrap:balance}
     .lead{color:#3b4a5a;margin:.7rem auto 0;max-width:50ch;text-wrap:pretty}
-    /* sections */
+
+    /* sections（既存） */
     section{max-width:1100px;margin:auto;padding:3rem 1rem}
     .two{display:grid;grid-template-columns:repeat(12,1fr);gap:1.2rem}
     .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
@@ -74,7 +99,9 @@
   <!-- header -->
   <header class="nav" aria-label="グローバルナビゲーション">
     <div class="nav-wrap">
+      <!-- 上段：サイト名（中央・32px） -->
       <div class="brand" aria-label="サイト名"><span>五島市</span><b>福江魚市</b></div>
+      <!-- 下段：ナビ（中央寄せ） -->
       <ul>
         <li><a href="#about" aria-label="市場の概要へ移動">市場の概要</a></li>
         <li><a href="#shipper">出荷者</a></li>
